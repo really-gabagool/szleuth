@@ -43,7 +43,7 @@ BANNER = """
  ███████║███████╗███████╗███████╗╚██████╔╝   ██║   ██║  ██║
  ╚══════╝╚══════╝╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
    s7comm / SZL asset enumerator   ·   read-only recon   v{ver}
-        authorized targets only — you own it or you have a scope
+
 """
 
 
