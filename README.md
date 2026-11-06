@@ -58,7 +58,7 @@ exploitation of any CVE. It is an inventory/recon tool, not an attack tool.
 ```bash
 git clone https://github.com/really-gabagool/szleuth
 cd szleuth
-python3 szleuth.py --help
+python3 s7enum.py --help
 ```
 
 No `pip install` needed.
@@ -66,7 +66,7 @@ No `pip install` needed.
 ## Usage
 
 ```
-python3 szleuth.py [options] <targets...>
+python3 s7enum.py [options] <targets...>
 
 targets:
   10.0.0.5                a single host
@@ -80,19 +80,19 @@ targets:
 
 ```bash
 # Enumerate one PLC
-python3 szleuth.py 10.0.0.5
+python3 s7enum.py 10.0.0.5
 
 # Sweep a subnet, 32 workers, write an inventory CSV
-python3 szleuth.py 10.0.0.0/24 -w 32 --csv inventory.csv
+python3 s7enum.py 10.0.0.0/24 -w 32 --csv inventory.csv
 
 # JSON for piping into jq (banner goes to stderr, so stdout stays clean)
-python3 szleuth.py 10.0.0.5 --json | jq .
+python3 s7enum.py 10.0.0.5 --json | jq .
 
 # Ask the CPU which SZLs it supports, then pull a couple directly
-python3 szleuth.py 10.0.0.5 --szl-dir --szl 0x0037 --szl 0x0131:0x0001
+python3 s7enum.py 10.0.0.5 --szl-dir --szl 0x0037 --szl 0x0131:0x0001
 
 # Force a specific CPU slot and shorten the timeout for a wide sweep
-python3 szleuth.py 10.0.0.0/22 -s 1 -t 2 --json > scan.json
+python3 s7enum.py 10.0.0.0/22 -s 1 -t 2 --json > scan.json
 ```
 
 ### Example output
@@ -105,7 +105,7 @@ python3 szleuth.py 10.0.0.0/22 -s 1 -t 2 --json > scan.json
  ███████║███████╗███████╗███████╗╚██████╔╝   ██║   ██║  ██║
  ╚══════╝╚══════╝╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
    s7comm / SZL asset enumerator   ·   read-only recon   v1.0
-     
+      
 
 [+] 192.0.2.10:102  S7 responded (slot 2)
       module                 6ES7 315-2EH14-0AB0  (V3.2.8)
@@ -129,6 +129,19 @@ The same host as a CSV row (`--csv -`):
 ```
 host,port,reachable,slot,cpu_state,protection_configured,protection_effective,mode_selector,leds,module,basic_firmware,station_name,module_name,serial_number,plant_designation,error
 192.0.2.10,102,True,2,RUN,none configured (no password),1 - open (all functions),RUN-P,RUN=on; BAF (battery fault)=blink 2Hz,6ES7 315-2EH14-0AB0  (V3.2.8),V3.2.8,SIMATIC 300(1),CPU 315-2 PN/DP,S C-X1U203456,LINE-A,
+```
+
+Asking the CPU which lists it supports, and pulling one directly
+(`--szl-dir --szl 0x0131:0x0001`):
+
+```
+$ python3 szleuth.py 192.0.2.10 --szl-dir --szl 0x0131:0x0001
+[+] 192.0.2.10:102  S7 responded (slot 2)
+      module                 6ES7 315-2EH14-0AB0  (V3.2.8)
+      ...
+      supported SZLs         12 -> 0x0000 0x0011 0x001c 0x0074 0x0119 0x0124 0x0131 0x0132 0x0174 0x0232 0x0424 0x0a91
+      SZL 0x0131:0x0001: 1 record(s)
+        000100011400c0000000f0001388000005dc
 ```
 
 > Example values are illustrative. `192.0.2.0/24` is a documentation range
