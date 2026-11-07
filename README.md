@@ -58,7 +58,7 @@ exploitation of any CVE. It is an inventory/recon tool, not an attack tool.
 ```bash
 git clone https://github.com/really-gabagool/szleuth
 cd szleuth
-python3 s7enum.py --help
+python3 szleuth.py --help
 ```
 
 No `pip install` needed.
@@ -66,7 +66,7 @@ No `pip install` needed.
 ## Usage
 
 ```
-python3 s7enum.py [options] <targets...>
+python3 szleuth.py [options] <targets...>
 
 targets:
   10.0.0.5                a single host
@@ -80,19 +80,19 @@ targets:
 
 ```bash
 # Enumerate one PLC
-python3 s7enum.py 10.0.0.5
+python3 szleuth.py 10.0.0.5
 
 # Sweep a subnet, 32 workers, write an inventory CSV
-python3 s7enum.py 10.0.0.0/24 -w 32 --csv inventory.csv
+python3 szleuth.py 10.0.0.0/24 -w 32 --csv inventory.csv
 
 # JSON for piping into jq (banner goes to stderr, so stdout stays clean)
-python3 s7enum.py 10.0.0.5 --json | jq .
+python3 szleuth.py 10.0.0.5 --json | jq .
 
 # Ask the CPU which SZLs it supports, then pull a couple directly
-python3 s7enum.py 10.0.0.5 --szl-dir --szl 0x0037 --szl 0x0131:0x0001
+python3 szleuth.py 10.0.0.5 --szl-dir --szl 0x0037 --szl 0x0131:0x0001
 
 # Force a specific CPU slot and shorten the timeout for a wide sweep
-python3 s7enum.py 10.0.0.0/22 -s 1 -t 2 --json > scan.json
+python3 szleuth.py 10.0.0.0/22 -s 1 -t 2 --json > scan.json
 ```
 
 ### Example output
